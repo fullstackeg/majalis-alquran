@@ -8,8 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Hidayah extends Model
 {
     protected $table = 'hidayat';
-    
-    protected $guarded = [];
+
+    // تحديد الأعمدة المسموح بالحشو الجماعي لضمان عدم حدوث أي خطأ مع أعمدة الجدول مثل votes_count
+    protected $fillable = [
+        'user_id',
+        'majlis_id',
+        'content',
+        'status',
+        'votes_count',
+    ];
 
     public function majlis(): BelongsTo
     {

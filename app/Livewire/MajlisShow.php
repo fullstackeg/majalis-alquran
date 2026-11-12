@@ -13,6 +13,8 @@ class MajlisShow extends Component
     public Majlis $majlis;
     public $content = '';
 
+    public string $newHidayatContent = '';
+
     protected $rules = [
         'content' => 'required|min:10|max:1000',
     ];
@@ -77,6 +79,31 @@ class MajlisShow extends Component
         }
 
         // تحديث الكائن وإعادة تحميل العلاقات لكي يظهر القلب أحمر فوراً
+        $this->mount($this->majlis->refresh());
+    }
+
+    public function storeHidayat()
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        $this->validate([
+            'newHidayatContent' => 'required|min:10|max:1000',
+        ]);
+
+        \App\Models\Hidayah::create([
+            'user_id' => auth()->id(),
+            'majlis_id' => $this->majlis->id,
+            'content' => $this->newHidayatContent,
+            'status' => 'pending', // قيد المراجعة بانتظار موافقة المشرف
+            'votes_count' => 0,    // القيمة الافتراضية للتصويتات
+        ]);
+
+        $this->newHidayatContent = '';
+
+        session()->flash('hidayat_message', 'جزاك الله خيراً! تم إرسال الهداية بنجاح وستظهر للعامة بعد مراجعتها.');
+
         $this->mount($this->majlis->refresh());
     }
 

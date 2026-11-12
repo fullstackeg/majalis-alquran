@@ -2,21 +2,35 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+// User Livewire components
 use App\Livewire\MajlisShow;
 use App\Livewire\MajalisIndex;
+use App\Livewire\MyContributions;
+// Admin Livewire components
+use App\Livewire\Admin\TadabburModeration;
+use App\Livewire\Admin\MajlisManager;
+use App\Livewire\Admin\AyahManager;
 
-Route::get('/majalis/{majlis}', MajlisShow::class)->middleware(['auth'])->name('majalis.show');
+// 1. الصفحة الرئيسية أصبحت تعرض المجalis لجميع الزوار (بدون auth)
+Route::get('/', MajalisIndex::class)->name('majalis.index');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// 2. تصفح تفاصيل مجلس معين متاح للجميع أيضاً (بدون auth)
+Route::get('/majalis/{majlis}', MajlisShow::class)->name('majalis.show');
 
-Route::get('/', MajalisIndex::class)->middleware(['auth'])->name('dashboard');
+// 3. لوحة التحكم والمسارات الخاصة بالأعضاء والمشرفين
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', MajalisIndex::class)->name('dashboard'); // للإحالة المتوافقة
+    Route::get('/my-contributions', MyContributions::class)->name('my-contributions');
 
-Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/tadabburat/pending', TadabburModeration::class)->name('tadabburat.pending');
+    Route::get('/majalis', MajlisManager::class)->name('majalis.index');
+    Route::get('/majalis/{majlis}/ayat', AyahManager::class)->name('majalis.ayat');
+});
+
+require __DIR__ . '/auth.php';

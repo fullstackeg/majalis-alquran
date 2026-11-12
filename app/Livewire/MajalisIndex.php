@@ -39,6 +39,6 @@ class MajalisIndex extends Component
 
         return view('livewire.majlis-index', [
             'majalis' => $majalis
-        ]);
+        ])->layout('layouts.app'); // تأكد من وجود هذه السلسلة لعرض الهيدر والتصميم العام
     }
 }

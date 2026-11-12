@@ -94,5 +94,56 @@
             </div>
         </div>
 
+        <!-- قسم الهدايات والسلوك المستنبط -->
+<div class="mt-12 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 space-y-6">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-gray-700 pb-3">
+        الهدايات والسلوك المستنبط ({{ $majlis->hidayat->count() }})
+    </h3>
+
+    @if (session()->has('hidayat_message'))
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 rounded-lg text-sm">
+            {{ session('hidayat_message') }}
+        </div>
+    @endif
+
+    <!-- عرض الهدايات المنشورة -->
+    <div class="space-y-4">
+        @forelse($majlis->hidayat as $hidayah)
+            <div class="p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-100 dark:border-gray-700">
+                <p class="text-gray-800 dark:text-gray-200 text-sm mb-2 leading-relaxed">{{ $hidayah->content }}</p>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                    بقلم: {{ $hidayah->user->name }} • {{ \Carbon\Carbon::parse($hidayah->created_at)->locale('ar')->diffForHumans() }}
+                </div>
+            </div>
+        @empty
+            <p class="text-gray-500 dark:text-gray-400 text-sm">لا توجد هدايات منشورة بعد في هذا المجلس.</p>
+        @endforelse
+    </div>
+
+    <!-- نموذج إضافة هداية جديدة -->
+    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-3 text-sm">أضف هداية أو سلوكاً عملياً مستنبطاً</h4>
+            @auth
+                <form wire:submit="storeHidayat" class="space-y-4">
+                    <div>
+                        <textarea wire:model="newHidayatContent" rows="3" 
+                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm"
+                                placeholder="اكتب هداية عملية أو سلوكاً إيمانيّاً تستنبطه من الآيات..."></textarea>
+                        @error('newHidayatContent') 
+                            <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> 
+                        @enderror
+                    </div>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-md transition">
+                        إرسال الهداية للمراجعة
+                    </button>
+                </form>
+            @else
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    يرجى <a href="{{ route('login') }}" class="text-emerald-600 hover:underline">تسجيل الدخول</a> لتتمكن من مشاركة الهدايات.
+                </p>
+            @endauth
+        </div>
+    </div>
+
     </div>
 </div>

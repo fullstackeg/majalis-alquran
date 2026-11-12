@@ -8,7 +8,7 @@
                 <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">تدبرات ومجالس علمية على منهج الإمام الشيخ فريد الأنصاري رحمه الله</p>
             </div>
 
-            <!-- حقل البحث الجديد -->
+            <!-- حقل البحث الحي -->
             <div class="w-full sm:w-1/3 relative">
                 <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                     <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,6 +26,11 @@
             @forelse($majalis as $majlis)
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between transition hover:shadow-md">
                     <div class="p-6">
+                        <!-- عرض الـ slug بخط صغير أو كرمز تعريفي نظيف إن أردت إظهاره (اختياري) -->
+                        <div class="mb-2 text-xs text-emerald-600 dark:text-emerald-400 font-mono">
+                            #{{ $majlis->slug }}
+                        </div>
+
                         <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                             {{ $majlis->title }}
                         </h2>
@@ -41,6 +46,7 @@
                             <span>🌱 {{ $majlis->hidayat_count }} هدايات</span>
                         </div>
                         
+                        <!-- الزر سيقوم بتوجيه المستخدم تلقائياً باستخدام الـ slug الآمن -->
                         <a href="{{ route('majalis.show', $majlis) }}" class="inline-flex items-center px-3 py-1.5 bg-emerald-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 transition">
                             دخـول المجلس
                         </a>
@@ -48,7 +54,6 @@
                 </div>
             @empty
                 <div class="col-span-1 md:col-span-2 lg:col-span-3 text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
-                    <!-- رسالة متغيرة حسب حالة البحث -->
                     @if($search)
                         <p class="text-gray-500 dark:text-gray-400 text-lg">لم نجد أي مجالس تطابق بحثك عن: "<span class="font-bold text-emerald-600 dark:text-emerald-400">{{ $search }}</span>"</p>
                     @else
