@@ -2,30 +2,37 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ProfileUpdateRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => [
+            'name' => [
                 'required',
                 'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                'min:5',
+                'max:100',
+                'regex:/^[\p{Arabic}\s]+$/u',
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'يرجى إدخال الاسم الكامل.',
+            'name.min' => 'يجب أن يتكون الاسم الكامل من 5 أحرف على الأقل.',
+            'name.max' => 'يجب ألا يتجاوز الاسم الكامل 100 حرف.',
+            'name.regex' => 'يرجى كتابة الاسم الكامل باللغة العربية فقط (بدون أرقام أو حروف أجنبية).',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'name' => 'الاسم الكامل',
         ];
     }
 }

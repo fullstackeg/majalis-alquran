@@ -10,6 +10,7 @@ use App\Livewire\MyContributions;
 use App\Livewire\Admin\TadabburModeration;
 use App\Livewire\Admin\MajlisManager;
 use App\Livewire\Admin\AyahManager;
+use App\Livewire\Admin\Dashboard as AdminDashboard;
 
 // 1. الصفحة الرئيسية أصبحت تعرض المجalis لجميع الزوار (بدون auth)
 Route::get('/', MajalisIndex::class)->name('majalis.index');
@@ -27,7 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('/tadabburat/pending', TadabburModeration::class)->name('tadabburat.pending');
     Route::get('/majalis', MajlisManager::class)->name('majalis.index');
     Route::get('/majalis/{majlis}/ayat', AyahManager::class)->name('majalis.ayat');

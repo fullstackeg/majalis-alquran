@@ -25,19 +25,25 @@
                     </x-nav-link>
 
                     @auth
-                        <!-- رابط مساهماتي الشخصية (للمستخدم المسجل) -->
+                        <!-- رابط مساهماتي الشخصية (لأي مستخدم مسجل) -->
                         <x-nav-link :href="route('my-contributions')" :active="request()->routeIs('my-contributions')">
                             مساهماتي
                         </x-nav-link>
 
-                        <!-- رابط مراجعة المشرف (للمشرفين) -->
-                        <x-nav-link :href="route('admin.tadabburat.pending')" :active="request()->routeIs('admin.tadabburat.*')">
-                            مراجعة التدبرات والهدايات
-                        </x-nav-link>
+                        <!-- روابط المشرفين (تظهر حصرياً لمن لديهم صلاحية المشرف is_admin) -->
+                        @if(auth()->user()->is_admin)
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                لوحة الإحصائيات
+                            </x-nav-link>
 
-                        <x-nav-link :href="route('admin.majalis.index')" :active="request()->routeIs('admin.majalis.*')">
-                            إدارة المجالس
-                        </x-nav-link>
+                            <x-nav-link :href="route('admin.tadabburat.pending')" :active="request()->routeIs('admin.tadabburat.*')">
+                                مراجعة التدبرات والهدايات
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('admin.majalis.index')" :active="request()->routeIs('admin.majalis.*')">
+                                إدارة المجالس
+                            </x-nav-link>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -123,12 +129,21 @@
                 المجالس
             </x-responsive-nav-link>
             @auth
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    لوحة التحكم
+                <x-responsive-nav-link :href="route('my-contributions')" :active="request()->routeIs('my-contributions')">
+                    مساهماتي
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.tadabburat.pending')" :active="request()->routeIs('admin.tadabburat.*')">
-                    مراجعة التدبرات
-                </x-responsive-nav-link>
+
+                @if(auth()->user()->is_admin)
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                        لوحة الإحصائيات
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.tadabburat.pending')" :active="request()->routeIs('admin.tadabburat.*')">
+                        مراجعة التدبرات
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.majalis.index')" :active="request()->routeIs('admin.majalis.*')">
+                        إدارة المجالس
+                    </x-responsive-nav-link>
+                @endif
             @endauth
         </div>
 

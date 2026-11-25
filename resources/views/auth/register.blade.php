@@ -12,8 +12,14 @@
 
             <!-- Name -->
             <div>
-                <x-input-label for="name" value="الاسم الكامل" class="text-gray-700 dark:text-gray-300" />
-                <x-text-input id="name" class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-input-label for="name" value="الاسم الكامل (بالعربية)" class="text-gray-700 dark:text-gray-300" />
+                <x-text-input id="name" 
+                            class="block mt-1 w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm" 
+                            type="text" 
+                            name="name" 
+                            :value="old('name')" 
+                            placeholder="مثال: عبد الله محمد الإدريسي"
+                            required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
